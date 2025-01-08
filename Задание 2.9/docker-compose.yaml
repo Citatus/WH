@@ -1,0 +1,20 @@
+version: '3.0'
+services:
+	db:
+		image: 'mysql:5.7'
+		environment:
+			MYSQL_ROOT_PASSWORD: "password"
+		command: '--init-file /home/kali/dbserver/init.sql'
+		ports:
+			- '3306:3306'
+		volumes:
+			- './dbfile:/var/lib/mysql'
+			- './init.sql:/docker-entrypoint-initdb.d/init.sql'
+	server:
+		image: 'server'
+		ports:
+			- '8888:80'
+		volumes:
+			- './src:/var/www/html'
+		depends on:
+			- db
