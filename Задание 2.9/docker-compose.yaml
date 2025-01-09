@@ -1,20 +1,24 @@
-version: '3.0'
+version: '3'
 services:
-	db:
-		image: 'mysql:5.7'
-		environment:
-			MYSQL_ROOT_PASSWORD: "password"
-		command: '--init-file /home/kali/dbserver/init.sql'
-		ports:
-			- '3306:3306'
-		volumes:
-			- './dbfile:/var/lib/mysql'
-			- './init.sql:/docker-entrypoint-initdb.d/init.sql'
-	server:
-		image: 'server'
-		ports:
-			- '8888:80'
-		volumes:
-			- './src:/var/www/html'
-		depends_on:
-			- db
+  server:
+    image: 'ivanov'
+    build: .
+    ports:
+      - '8888:80'
+    volumes:
+      - './src:/var/www/html'
+    depends_on:
+      - db
+
+  db:
+    image: 'mysql:5.7'
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sport
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - '3306:3306'
+    volumes:
+      - './dbfile:/var/lib/mysql'
+      - './init.sql:/docker-entrypoint-initdb.d/init.sql'
